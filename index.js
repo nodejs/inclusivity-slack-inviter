@@ -18,6 +18,8 @@ app.use(cookieSession({
 	keys: config.web.cookieKeys
 }));
 
+app.use("/public", express.static("public"));
+
 app.engine("handlebars", expressHandlebars({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
@@ -46,7 +48,9 @@ app.get("/signup", gha.authorize, (request, response) => {
 
 		let ageInDays = (Date.now() - new Date(data.created_at)) / (1000 * 60 * 60 * 24);
 		if (ageInDays < config.github.minimumAge) {
-			// TODO: Check whitelist for approved accounts
+			return response.render("new-account", {
+				minimumAge: config.github.minimumAge
+			});
 		}
 
 		ghaUser.githubProfile = data;
@@ -80,11 +84,12 @@ app.post("/signup", gha.authorize, (request, response) => {
 
 		// TODO: Log the GitHub -> email mapping
 
-		response.render("thanks", {
-			name: name,
-			email: email
-		});
+		response.redirect("thanks");
 	});
+});
+
+app.get("/thanks", (request, response) => {
+	response.render("thanks");
 });
 
 app.listen(config.web.port, () => {
