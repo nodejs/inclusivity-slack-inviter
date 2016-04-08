@@ -7,8 +7,8 @@
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Scott González <scott.gonzalez@gmail.com> (http://scottgonzalez.com)",
+  "license": "MIT",
   "dependencies": {
     "connect-oauth-github": "^0.1.0",
     "cookie-session": "^2.0.0-alpha.1",

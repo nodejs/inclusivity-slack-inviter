@@ -16,3 +16,9 @@ Configuration settings are stored in `config.json`. The following settings must 
 * `web`
   * `cookieKeys`: An [array of keys for signing cookies](https://github.com/expressjs/cookie-session#keys).
   * `port`: The port to listen on for incoming requests.
+
+## License
+
+Copyright Node.js Inclusivity Contributors
+
+SPDX-License-Identifier: MIT
