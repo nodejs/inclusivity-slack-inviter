@@ -44,8 +44,6 @@ app.get("/signup", gha.authorize, (request, response) => {
 			return response.status(500).render("error");
 		}
 
-		// TODO: Filter on data.login blacklist
-
 		let ageInDays = (Date.now() - new Date(data.created_at)) / (1000 * 60 * 60 * 24);
 		if (ageInDays < config.github.minimumAge) {
 			// TODO: Check whitelist for approved accounts
