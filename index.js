@@ -8,14 +8,20 @@ const github = require("github-request");
 const postRequest = require("request").post;
 const Slack = require("./lib/slack");
 const version = require("./package").version;
-const config = require("./config");
 
-const slackClient = new Slack(config.slack);
+require("dotenv").config({ silent: true });
+process.env.GITHUB_MINIMUM_AGE = process.env.GITHUB_MINIMUM_AGE || 30;
+process.env.PORT = process.env.PORT || 3000;
+
+const slackClient = new Slack({
+	team: process.env.SLACK_TEAM,
+	token: process.env.SLACK_TOKEN
+});
 
 const app = express();
 app.use(cookieSession({
 	name: "session",
-	keys: config.web.cookieKeys
+	keys: process.env.COOKIE_KEYS.split(",")
 }));
 
 app.use("/public", express.static("public"));
@@ -24,8 +30,8 @@ app.engine("handlebars", expressHandlebars({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 const gha = githubAuth.createClient({
-	id: config.github.clientId,
-	secret: config.github.secret,
+	id: process.env.GITHUB_CLIENT_ID,
+	secret: process.env.GITHUB_SECRET,
 	scope: "user:email"
 });
 
@@ -47,9 +53,9 @@ app.get("/signup", gha.authorize, (request, response) => {
 		}
 
 		let ageInDays = (Date.now() - new Date(data.created_at)) / (1000 * 60 * 60 * 24);
-		if (ageInDays < config.github.minimumAge) {
+		if (ageInDays < process.env.GITHUB_MINIMUM_AGE) {
 			return response.render("new-account", {
-				minimumAge: config.github.minimumAge
+				minimumAge: process.env.GITHUB_MINIMUM_AGE
 			});
 		}
 
@@ -92,7 +98,7 @@ app.get("/thanks", (request, response) => {
 	response.render("thanks");
 });
 
-app.listen(config.web.port, () => {
+app.listen(process.env.PORT, () => {
 	console.log("Node.js Inclusivity WG Slack Inviter v" + version +
-		" listening on port " + config.web.port);
+		" listening on port " + process.env.PORT);
 });
