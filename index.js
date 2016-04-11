@@ -48,7 +48,6 @@ app.get("/signup", gha.authorize, (request, response) => {
 		path: "/user?access_token=" + ghaUser.accessToken,
 	}, (error, data) => {
 		if (error) {
-			// TODO: Implement error page
 			return response.status(500).render("error");
 		}
 
