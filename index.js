@@ -74,7 +74,9 @@ app.post("/signup", gha.authorize, (request, response) => {
 	slackClient.invite(email, (error, status) => {
 		if (error) {
 			if (error.code === "INVALID_EMAIL") {
-				// TODO: Let the user know
+				return response.render("invalid-email", {
+					email: email
+				});
 			}
 
 			return response.status(500).render("error");
@@ -84,7 +86,11 @@ app.post("/signup", gha.authorize, (request, response) => {
 		delete gha.users[request.sessionID];
 
 		if (status === "ALREADY_INVITED" || status === "ALREADY_IN_TEAM") {
-			// TODO: Let the user know they're already invited or already in the team
+			return response.render("existing", {
+				status: status === "ALREADY_INVITED" ?
+					"You already have a pending invitation" :
+					"You're already on the Slack team"
+			});
 		}
 
 		// TODO: Log the GitHub -> email mapping
