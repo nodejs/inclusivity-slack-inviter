@@ -1,0 +1,27 @@
+{
+  "name": "inclusivity-slack-inviter",
+  "version": "0.0.0",
+  "description": "Automated Slack invitations for the Node.js Inclusivity WG",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "setup": "node scripts/setup.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Scott González <scott.gonzalez@gmail.com> (http://scottgonzalez.com)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nodejs/inclusivity-slack-inviter.git"
+  },
+  "dependencies": {
+    "connect-oauth-github": "^0.1.0",
+    "cookie-session": "^2.0.0-alpha.1",
+    "dotenv": "^2.0.0",
+    "express": "^4.13.4",
+    "express-handlebars": "^3.0.0",
+    "github-request": "^1.2.4",
+    "mysql": "^2.10.2",
+    "request": "^2.69.0"
+  }
+}
