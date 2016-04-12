@@ -10,6 +10,10 @@
   },
   "author": "Scott González <scott.gonzalez@gmail.com> (http://scottgonzalez.com)",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nodejs/inclusivity-slack-inviter.git"
+  },
   "dependencies": {
     "connect-oauth-github": "^0.1.0",
     "cookie-session": "^2.0.0-alpha.1",
