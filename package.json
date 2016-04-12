@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "setup": "node scripts/setup.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Scott González <scott.gonzalez@gmail.com> (http://scottgonzalez.com)",
@@ -16,6 +17,7 @@
     "express": "^4.13.4",
     "express-handlebars": "^3.0.0",
     "github-request": "^1.2.4",
+    "mysql": "^2.10.2",
     "request": "^2.69.0"
   }
 }

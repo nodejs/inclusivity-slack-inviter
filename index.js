@@ -6,6 +6,7 @@ const expressHandlebars = require("express-handlebars");
 const githubAuth = require("connect-oauth-github");
 const github = require("github-request");
 const postRequest = require("request").post;
+const mysql = require("mysql");
 const Slack = require("./lib/slack");
 const version = require("./package").version;
 
@@ -16,6 +17,19 @@ process.env.PORT = process.env.PORT || 3000;
 const slackClient = new Slack({
 	team: process.env.SLACK_TEAM,
 	token: process.env.SLACK_TOKEN
+});
+
+const mysqlConnection = mysql.createConnection({
+	host: process.env.DB_HOST,
+	port: process.env.DB_PORT || 3306,
+	user: process.env.DB_USER,
+	password: process.env.DB_PASSWORD,
+	database: process.env.DB_NAME
+});
+
+mysqlConnection.on("error", (error) => {
+	console.error(error.stack);
+	shutdown();
 });
 
 const app = express();
@@ -68,6 +82,8 @@ app.get("/signup", gha.authorize, (request, response) => {
 
 app.post("/signup", gha.authorize, (request, response) => {
 	let ghaUser = gha.users[request.sessionID];
+	let githubId = ghaUser.githubProfile.id;
+	let githubLogin = ghaUser.githubProfile.login;
 	let name = ghaUser.githubProfile.name;
 	let email = ghaUser.githubProfile.email;
 
@@ -93,7 +109,14 @@ app.post("/signup", gha.authorize, (request, response) => {
 			});
 		}
 
-		// TODO: Log the GitHub -> email mapping
+		mysqlConnection.query("INSERT INTO `users` SET ?", {
+			github_id: githubId,
+			github_login: githubLogin,
+			name: name,
+			email: email
+		}, (error) => {
+			console.error(error);
+		});
 
 		response.redirect("thanks");
 	});
@@ -103,7 +126,16 @@ app.get("/thanks", (request, response) => {
 	response.render("thanks");
 });
 
-app.listen(process.env.PORT, () => {
+var server = app.listen(process.env.PORT, () => {
 	console.log("Node.js Inclusivity WG Slack Inviter v" + version +
 		" listening on port " + process.env.PORT);
 });
+
+function shutdown() {
+	console.log("Shutting down...");
+	server.close(() => {
+		mysqlConnection.end();
+	});
+}
+
+process.on("SIGTERM", shutdown);
