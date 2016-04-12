@@ -33,7 +33,7 @@ mysqlConnection.query(
 			return mysqlConnection.end(() => process.exit(1));
 		}
 
-		console.log("Database setup compelete");
+		console.log("Database setup complete");
 		mysqlConnection.end();
 	}
 );
