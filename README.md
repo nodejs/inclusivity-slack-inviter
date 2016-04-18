@@ -11,7 +11,7 @@ Configuration settings are set via environment variables. For convenience during
 * `GITHUB_MINIMUM_AGE`: The minimum age, in days, that an account must exist on GitHub prior to joining the Slack team. Defaults to `30`.
 * `SLACK_TEAM`: The name of the Slack team to invite users to.
 * `SLACK_TOKEN`: The token for accessing Slack's API.
-* `COOKIE_KEYS`: An [array of keys for signing cookies](https://github.com/expressjs/cookie-session#keys).
+* `COOKIE_KEYS`: A secret for signing cookies.
 * `PORT`: The port to listen on for incoming requests. Default to `3000`.
 * `DB_HOST`: The hostname of the database server to connect to.
 * `DB_PORT`: The port to connect to.

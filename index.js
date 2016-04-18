@@ -1,12 +1,12 @@
 "use strict";
 
-const cookieSession = require("cookie-session");
 const express = require("express");
 const expressHandlebars = require("express-handlebars");
 const githubAuth = require("connect-oauth-github");
 const github = require("github-request");
-const postRequest = require("request").post;
 const mysql = require("mysql");
+const postRequest = require("request").post;
+const session = require("express-session");
 const Slack = require("./lib/slack");
 const version = require("./package").version;
 
@@ -33,9 +33,11 @@ mysqlConnection.on("error", (error) => {
 });
 
 const app = express();
-app.use(cookieSession({
-  name: "session",
-  keys: process.env.COOKIE_KEYS.split(",")
+app.use(session({
+  cookie: {},
+  resave: false,
+  saveUninitialized: false,
+  secret: process.env.COOKIE_KEYS
 }));
 
 app.use("/public", express.static("public"));
